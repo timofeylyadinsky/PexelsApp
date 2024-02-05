@@ -12,4 +12,7 @@ object Deps {
     val hiltCompiler by lazy {"com.google.dagger:hilt-android:${Versions.hilt}"}
     val hiltCompilerKapt by lazy {"com.google.dagger:hilt-android-compiler:${Versions.hilt}"}
 
+    val retrofit by lazy {"com.squareup.retrofit2:retrofit:${Versions.retrofit}"}
+    val retrofitGson by lazy {"com.squareup.retrofit2:converter-gson:${Versions.retrofit}"}
+
 }

@@ -67,6 +67,9 @@ dependencies {
     annotationProcessor(Deps.hiltCompiler)
     kapt(Deps.hiltCompilerKapt)
 
+    implementation(Deps.retrofit)
+    implementation(Deps.retrofitGson)
+
 
 
 
