@@ -4,13 +4,13 @@ import lt.timofey.domain.entity.CuratedPhotos
 import lt.timofey.domain.entity.FeaturedCollections
 import lt.timofey.domain.entity.SearchPhotos
 
-sealed class HomeScreenUIState {
-    private var loadingFeaturedCollections: FeaturedCollectionsUIState = FeaturedCollectionsUIState.LOADING
-    private var loadingCuratedPhotos: CuratedPhotosUIState = CuratedPhotosUIState.LOADING
-    private var loadingSearchedPhotos: SearchPhotosUIState = SearchPhotosUIState.WAIT
-    private var isSearched: Boolean = false
-    private var searchQuery: String = ""
-}
+data class HomeScreenUIState (
+    var loadingFeaturedCollections: FeaturedCollectionsUIState = FeaturedCollectionsUIState.LOADING,
+    var loadingCuratedPhotos: CuratedPhotosUIState = CuratedPhotosUIState.LOADING,
+    var loadingSearchedPhotos: SearchPhotosUIState = SearchPhotosUIState.WAIT,
+    var isSearched: Boolean = false,
+    var searchQuery: String = ""
+)
 
 sealed class FeaturedCollectionsUIState {
     data object LOADING : FeaturedCollectionsUIState()
