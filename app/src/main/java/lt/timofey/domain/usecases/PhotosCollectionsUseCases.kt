@@ -19,8 +19,8 @@ class getFeaturedCollectionsUseCase @Inject constructor(
     private val photosRepositoryImpl: PhotosRepositoryImpl,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke() : Flow<FeaturedCollectionsData> = withContext(ioDispatcher) {
-        flow{
+    suspend operator fun invoke(): Flow<FeaturedCollectionsData> = withContext(ioDispatcher) {
+        flow {
             when (val response = photosRepositoryImpl.getFeaturedCollections()) {
                 is NetworkResult.Success -> emit(FeaturedCollectionsData(listOf(response.data.toFeaturedCollections())))
                 is NetworkResult.Error -> emit(FeaturedCollectionsData(errorMessage = "${response.code} : ${response.message}"))
@@ -33,7 +33,7 @@ class getCuratedPhotosUseCase @Inject constructor(
     private val photosRepositoryImpl: PhotosRepositoryImpl,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke() : Flow<CuratedPhotosData> = withContext(ioDispatcher) {
+    suspend operator fun invoke(): Flow<CuratedPhotosData> = withContext(ioDispatcher) {
         flow {
             when (val response = photosRepositoryImpl.getCuratedPhotos()) {
                 is NetworkResult.Success -> emit(CuratedPhotosData(listOf(response.data.toCuratedPhotos())))
@@ -47,13 +47,13 @@ class getSearchPhotosUseCase @Inject constructor(
     private val photosRepositoryImpl: PhotosRepositoryImpl,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke(searchQuery: String) : Flow<SearchPhotosData> = withContext(ioDispatcher) {
-        flow {
-            when (val response = photosRepositoryImpl.searchForPhotos(searchQuery)) {
-                is NetworkResult.Success -> emit(SearchPhotosData(listOf(response.data.toSearchPhotos())))
-                is NetworkResult.Error -> emit(SearchPhotosData(errorMessage = "${response.code} : ${response.message}"))
+    suspend operator fun invoke(searchQuery: String): Flow<SearchPhotosData> =
+        withContext(ioDispatcher) {
+            flow {
+                when (val response = photosRepositoryImpl.searchForPhotos(searchQuery)) {
+                    is NetworkResult.Success -> emit(SearchPhotosData(listOf(response.data.toSearchPhotos())))
+                    is NetworkResult.Error -> emit(SearchPhotosData(errorMessage = "${response.code} : ${response.message}"))
+                }
             }
         }
-    }
-
 }
