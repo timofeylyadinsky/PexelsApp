@@ -6,4 +6,5 @@ object Versions {
     const val hilt = "2.50"
     const val retrofit  = "2.9.0"
     const val navigation = "2.7.6"
+    const val hiltNav = "1.1.0"
 }

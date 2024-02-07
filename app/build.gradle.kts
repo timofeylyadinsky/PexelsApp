@@ -68,6 +68,7 @@ dependencies {
     implementation(Deps.navigationCompose)
     annotationProcessor(Deps.hiltCompiler)
     kapt(Deps.hiltCompilerKapt)
+    implementation(Deps.hiltNavigation)
 
     implementation(Deps.retrofit)
     implementation(Deps.retrofitGson)
