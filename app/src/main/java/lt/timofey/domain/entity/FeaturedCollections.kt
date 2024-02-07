@@ -8,7 +8,7 @@ data class FeaturedCollections(
 )
 
 data class Collections(
-    val id: Int,
+    val id: String,
     val title: String
 )
 

@@ -1,5 +1,6 @@
 package lt.timofey.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,14 +35,17 @@ class HomeScreenViewModel @Inject constructor(
                 if (data.errorMessage.isNullOrEmpty()) {
                     uiState.value.loadingFeaturedCollections =
                         FeaturedCollectionsUIState.SUCCESS(data.featuredCollections[0])
+                        Log.d("!!!!!!!", data.featuredCollections.toString())
                 } else {
                     uiState.value.loadingFeaturedCollections =
                         FeaturedCollectionsUIState.ERROR(message = data.errorMessage)
+                    Log.d("!!!!!!!", data.errorMessage.toString())
                 }
             }
         } catch (e: Exception) {
             uiState.value.loadingFeaturedCollections =
                 FeaturedCollectionsUIState.ERROR(message = e.localizedMessage)
+            Log.d("!!!!!!!", e.localizedMessage)
         }
     }
 
@@ -52,12 +56,15 @@ class HomeScreenViewModel @Inject constructor(
                 data ->
                 if (data.errorMessage.isNullOrEmpty()) {
                     uiState.value.loadingCuratedPhotos = CuratedPhotosUIState.SUCCESS(data.curatedPhotos[0])
+                    Log.d("!!!!!!!", data.curatedPhotos.toString())
                 } else {
                     uiState.value.loadingCuratedPhotos = CuratedPhotosUIState.ERROR(data.errorMessage)
+                    Log.d("!!!!!!!", data.errorMessage)
                 }
             }
         } catch (e: Exception) {
             uiState.value.loadingCuratedPhotos = CuratedPhotosUIState.ERROR(message = e.localizedMessage)
+            Log.d("!!!!!!!", e.localizedMessage)
         }
     }
 
