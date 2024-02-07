@@ -5,4 +5,5 @@ object Versions {
     const val bom = "2023.08.00"
     const val hilt = "2.50"
     const val retrofit  = "2.9.0"
+    const val navigation = "2.7.6"
 }

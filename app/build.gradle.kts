@@ -65,6 +65,7 @@ dependencies {
     implementation(Deps.material3)
 
     implementation(Deps.hilt)
+    implementation(Deps.navigationCompose)
     annotationProcessor(Deps.hiltCompiler)
     kapt(Deps.hiltCompilerKapt)
 

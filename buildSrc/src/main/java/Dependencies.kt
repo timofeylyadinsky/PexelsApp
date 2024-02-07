@@ -15,4 +15,6 @@ object Deps {
     val retrofit by lazy {"com.squareup.retrofit2:retrofit:${Versions.retrofit}"}
     val retrofitGson by lazy {"com.squareup.retrofit2:converter-gson:${Versions.retrofit}"}
 
+    val navigationCompose by lazy {"androidx.navigation:navigation-compose:${Versions.navigation}"}
+
 }
