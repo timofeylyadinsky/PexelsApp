@@ -69,6 +69,7 @@ class HomeScreenViewModel @Inject constructor(
                         )
                     }
                     Log.d("!!!!!!!", data.curatedPhotos.toString())
+                    Log.d("!!!!!!!", data.curatedPhotos[0].photos.size.toString())
                 } else {
                     uiState.update {
                         it.copy(loadingCuratedPhotos = CuratedPhotosUIState.ERROR(data.errorMessage))

@@ -81,7 +81,7 @@ fun PhotoItem(
     curatedPhoto: Photos
 ) {
     GlideImage(
-        imageModel = { curatedPhoto.src.original },
+        imageModel = { curatedPhoto.src.medium },
         modifier = Modifier.clickable { Log.d("!!!!", curatedPhoto.toString()) },
         imageOptions = ImageOptions(contentScale = ContentScale.Fit)
     )
