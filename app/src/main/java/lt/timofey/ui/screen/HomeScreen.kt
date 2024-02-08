@@ -1,11 +1,20 @@
 package lt.timofey.ui.screen
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import lt.timofey.domain.entity.CuratedPhotos
+import lt.timofey.ui.state.CuratedPhotosUIState
 import lt.timofey.ui.state.FeaturedCollectionsUIState
 import lt.timofey.ui.viewmodel.HomeScreenViewModel
 
@@ -15,12 +24,39 @@ fun HomeScreen(
     navController: NavController
 ) {
     val state = homeScreenViewModel.uiState.collectAsState()
+    HomeSearchBar()
+    when (val curated = state.value.loadingCuratedPhotos) {
+     //   PhotosCollections(navController = navController)
+        CuratedPhotosUIState.LOADING -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        is CuratedPhotosUIState.SUCCESS -> {
+           PhotosCollections(navController = navController, curatedPhotos = curated.curatedPhotos)
+        }
+
+        is CuratedPhotosUIState.ERROR -> {
+            Text(text = "failure ${(state as CuratedPhotosUIState.ERROR).message}")
+        }
+    }
     //Text(text = "${(state.value.loadingFeaturedCollections as FeaturedCollectionsUIState.SUCCESS).featuredCollections.collections.toString()}")
 }
 
 @Composable
-fun SearchBar(
+fun HomeSearchBar(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
+    
+}
 
+@Composable
+fun PhotosCollections(
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
+    navController: NavController,
+    curatedPhotos: CuratedPhotos
+) {
+    LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2), content = {
+
+    })
 }
