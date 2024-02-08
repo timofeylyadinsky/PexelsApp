@@ -1,5 +1,6 @@
 package lt.timofey.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,16 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import lt.timofey.domain.entity.CuratedPhotos
 import lt.timofey.domain.entity.Photos
@@ -31,7 +33,6 @@ fun HomeScreen(
     val state = homeScreenViewModel.uiState.collectAsState()
     HomeSearchBar()
     when (val curated = state.value.loadingCuratedPhotos) {
-        //   PhotosCollections(navController = navController)
         CuratedPhotosUIState.LOADING -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
@@ -46,7 +47,6 @@ fun HomeScreen(
             Text(text = "failure ${(state as CuratedPhotosUIState.ERROR).message}")
         }
     }
-    //Text(text = "${(state.value.loadingFeaturedCollections as FeaturedCollectionsUIState.SUCCESS).featuredCollections.collections.toString()}")
 }
 
 @Composable
@@ -67,13 +67,8 @@ fun PhotosCollections(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-//        curatedPhotos.photos.forEach() {
-//            PhotoItem(navController = navController, curatedPhoto = it)
-//        }
         items(curatedPhotos.photos) {
-            //curatedPhotos.photos.forEach() {
-                PhotoItem(navController = navController, curatedPhoto = it)
-            //}
+            PhotoItem(navController = navController, curatedPhoto = it)
         }
     }
 
@@ -85,11 +80,9 @@ fun PhotoItem(
     navController: NavController,
     curatedPhoto: Photos
 ) {
-    Card(modifier = Modifier
-        .clickable(onClick = {
-
-        })
-    ) {
-        GlideImage(imageModel = { curatedPhoto.src.original })
-    }
+    GlideImage(
+        imageModel = { curatedPhoto.src.original },
+        modifier = Modifier.clickable { Log.d("!!!!", curatedPhoto.toString()) },
+        imageOptions = ImageOptions(contentScale = ContentScale.Fit)
+    )
 }
