@@ -7,4 +7,5 @@ object Versions {
     const val retrofit  = "2.9.0"
     const val navigation = "2.7.6"
     const val hiltNav = "1.1.0"
+    const val glide = "1.0.0-beta01"
 }
