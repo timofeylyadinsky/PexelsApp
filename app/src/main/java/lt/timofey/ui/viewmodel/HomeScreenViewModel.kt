@@ -1,10 +1,14 @@
 package lt.timofey.ui.viewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import lt.timofey.domain.usecases.getCuratedPhotosUseCase
 import lt.timofey.domain.usecases.getFeaturedCollectionsUseCase
@@ -22,6 +26,7 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState = MutableStateFlow<HomeScreenUIState>(HomeScreenUIState())
+    val stat: StateFlow<HomeScreenUIState> = uiState.asStateFlow()
 
     init {
         fetchFeaturedCollections()
@@ -33,9 +38,12 @@ class HomeScreenViewModel @Inject constructor(
             val fetchCollections = getFeaturedCollectionsUseCase()
             fetchCollections.collect { data ->
                 if (data.errorMessage.isNullOrEmpty()) {
-                    uiState.value.loadingFeaturedCollections =
-                        FeaturedCollectionsUIState.SUCCESS(data.featuredCollections[0])
-                        Log.d("!!!!!!!", data.featuredCollections.toString())
+                    uiState.update { currentState ->
+                        currentState.copy(
+                            loadingFeaturedCollections =
+                            FeaturedCollectionsUIState.SUCCESS(data.featuredCollections[0])
+                        )
+                    }
                 } else {
                     uiState.value.loadingFeaturedCollections =
                         FeaturedCollectionsUIState.ERROR(message = data.errorMessage)
@@ -52,18 +60,25 @@ class HomeScreenViewModel @Inject constructor(
     private fun fetchCuratedCollection() = viewModelScope.launch {
         try {
             val fetchCollections = getCuratedPhotosUseCase()
-            fetchCollections.collect {
-                data ->
+            fetchCollections.collect { data ->
                 if (data.errorMessage.isNullOrEmpty()) {
-                    uiState.value.loadingCuratedPhotos = CuratedPhotosUIState.SUCCESS(data.curatedPhotos[0])
+                    uiState.update { currentState ->
+                        currentState.copy(
+                            loadingCuratedPhotos =
+                            CuratedPhotosUIState.SUCCESS(data.curatedPhotos[0])
+                        )
+                    }
                     Log.d("!!!!!!!", data.curatedPhotos.toString())
                 } else {
-                    uiState.value.loadingCuratedPhotos = CuratedPhotosUIState.ERROR(data.errorMessage)
+                    uiState.update {
+                        it.copy(loadingCuratedPhotos = CuratedPhotosUIState.ERROR(data.errorMessage))
+                    }
                     Log.d("!!!!!!!", data.errorMessage)
                 }
             }
         } catch (e: Exception) {
-            uiState.value.loadingCuratedPhotos = CuratedPhotosUIState.ERROR(message = e.localizedMessage)
+            uiState.value.loadingCuratedPhotos =
+                CuratedPhotosUIState.ERROR(message = e.localizedMessage)
             Log.d("!!!!!!!", e.localizedMessage)
         }
     }

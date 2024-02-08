@@ -8,4 +8,5 @@ object Versions {
     const val navigation = "2.7.6"
     const val hiltNav = "1.1.0"
     const val glide = "1.0.0-beta01"
+    const val landscapist = "2.2.3"
 }

@@ -17,8 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import com.skydoves.landscapist.glide.GlideImage
 import lt.timofey.domain.entity.CuratedPhotos
 import lt.timofey.domain.entity.Photos
 import lt.timofey.ui.state.CuratedPhotosUIState
@@ -62,7 +61,8 @@ fun PhotosCollections(
     navController: NavController,
     curatedPhotos: CuratedPhotos
 ) {
-    LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2),
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
         verticalItemSpacing = 4.dp,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.fillMaxSize()
@@ -71,15 +71,14 @@ fun PhotosCollections(
 //            PhotoItem(navController = navController, curatedPhoto = it)
 //        }
         items(curatedPhotos.photos) {
-            curatedPhotos.photos.forEach() {
+            //curatedPhotos.photos.forEach() {
                 PhotoItem(navController = navController, curatedPhoto = it)
-            }
+            //}
         }
     }
 
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PhotoItem(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
@@ -89,7 +88,8 @@ fun PhotoItem(
     Card(modifier = Modifier
         .clickable(onClick = {
 
-        })) {
-            GlideImage(model = {curatedPhoto.src.original}, contentDescription = curatedPhoto.alt)
+        })
+    ) {
+        GlideImage(imageModel = { curatedPhoto.src.original })
     }
 }

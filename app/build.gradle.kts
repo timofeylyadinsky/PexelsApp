@@ -71,6 +71,7 @@ dependencies {
     implementation(Deps.hiltNavigation)
 
     implementation(Deps.glideCompose)
+    implementation(Deps.landscapist)
 
     implementation(Deps.retrofit)
     implementation(Deps.retrofitGson)
