@@ -72,6 +72,7 @@ dependencies {
 
     implementation(Deps.glideCompose)
     implementation(Deps.landscapist)
+    implementation(Deps.coil)
 
     implementation(Deps.retrofit)
     implementation(Deps.retrofitGson)

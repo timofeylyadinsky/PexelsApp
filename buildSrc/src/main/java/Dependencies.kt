@@ -21,4 +21,6 @@ object Deps {
     val glideCompose by lazy {"com.github.bumptech.glide:compose:${Versions.glide}"}
     val landscapist by lazy {"com.github.skydoves:landscapist-glide:${Versions.landscapist}"}
 
+    val coil by lazy {"io.coil-kt:coil-compose:${Versions.coil}"}
+
 }
