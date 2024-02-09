@@ -5,11 +5,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import lt.timofey.domain.entity.toCuratedPhotos
 import lt.timofey.domain.usecases.getCuratedPhotosUseCase
 import lt.timofey.domain.usecases.getFeaturedCollectionsUseCase
 import lt.timofey.domain.usecases.getSearchPhotosUseCase
@@ -34,7 +38,34 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun onSearchTextChange(text: String) {
-        uiState.update { it.copy(searchQuery = text) }
+        uiState.update { it.copy(searchQuery = text, isSearched = text.isNotBlank())}
+        if (text.isNotBlank()) {
+                searchPhotosCollections(text)
+        }
+        else {
+            fetchCuratedCollection()
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun searchPhotosCollections(query: String) = viewModelScope.launch {
+        try {
+            val searchResult = searchPhotosUseCase(query)
+            searchResult.debounce(500L).collect() { data ->
+                if (data.errorMessage.isNullOrEmpty()) {
+                    uiState.update { it.copy(loadingCuratedPhotos = CuratedPhotosUIState.SUCCESS(data.curatedPhotos[0].toCuratedPhotos())) }
+                    Log.d("!!!!!!!", data.curatedPhotos.toString())
+                }
+                else {
+                    uiState.update {
+                        it.copy(loadingCuratedPhotos = CuratedPhotosUIState.ERROR(data.errorMessage))
+                    }
+                    Log.d("!!!!!!!", data.errorMessage)
+                }
+            }
+        } catch(e: Exception) {
+            Log.d("!!!!!Search", e.localizedMessage)
+        }
     }
 
     private fun fetchFeaturedCollections() = viewModelScope.launch {
