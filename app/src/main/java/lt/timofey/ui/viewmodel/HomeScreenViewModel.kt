@@ -33,6 +33,10 @@ class HomeScreenViewModel @Inject constructor(
         fetchCuratedCollection()
     }
 
+    fun onSearchTextChange(text: String) {
+        uiState.update { it.copy(searchQuery = text) }
+    }
+
     private fun fetchFeaturedCollections() = viewModelScope.launch {
         try {
             val fetchCollections = getFeaturedCollectionsUseCase()
