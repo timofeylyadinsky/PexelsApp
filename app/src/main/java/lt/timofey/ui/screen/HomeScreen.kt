@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -213,7 +214,7 @@ fun FeaturedCollectionList(
 ) {
     LazyRow(
         modifier = Modifier.padding(5.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(featuredCollection.collections) {
             Card(
@@ -222,15 +223,15 @@ fun FeaturedCollectionList(
                     .padding(5.dp)
                     .clip(shape = AbsoluteRoundedCornerShape(20.dp))
                     .clickable { }
-                    .background(color = Color.LightGray)
+                    .background(color = MaterialTheme.colorScheme.secondary)
             ) {
                 Text(
                     text = it.title,
                     modifier = Modifier
-                        .padding(7.dp),
+                        .padding(8.dp),
                     style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 )
             }
