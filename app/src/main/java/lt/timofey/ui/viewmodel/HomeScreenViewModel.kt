@@ -31,8 +31,10 @@ class HomeScreenViewModel @Inject constructor(
     val stat: StateFlow<HomeScreenUIState> = uiState.asStateFlow()
 
     init {
-        fetchFeaturedCollections()
-        fetchCuratedCollection()
+        viewModelScope.launch {
+            fetchFeaturedCollections()
+            fetchCuratedCollection()
+        }
     }
 
     fun onSearchTextChange(text: String) {

@@ -6,10 +6,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -38,9 +43,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import lt.timofey.R
 import lt.timofey.domain.entity.CuratedPhotos
+import lt.timofey.domain.entity.FeaturedCollections
 import lt.timofey.domain.entity.Photos
 import lt.timofey.ui.navigation.Screens
 import lt.timofey.ui.state.CuratedPhotosUIState
+import lt.timofey.ui.state.FeaturedCollectionsUIState
+import lt.timofey.ui.state.HomeScreenUIState
 import lt.timofey.ui.viewmodel.HomeScreenViewModel
 
 
@@ -58,21 +66,26 @@ fun HomeScreen(
             BottomBar(navController = navController)
         }
     ) { paddingValues ->
-        when (val curated = state.value.loadingCuratedPhotos) {
-            CuratedPhotosUIState.LOADING -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+        Column(modifier = Modifier.padding(paddingValues = paddingValues)) {
+            FeaturedCollections()
+            when (val curated = state.value.loadingCuratedPhotos) {
+                CuratedPhotosUIState.LOADING -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
                 }
-            }
-            is CuratedPhotosUIState.SUCCESS -> {
-                PhotosCollections(
-                    navController = navController,
-                    curatedPhotos = curated.curatedPhotos,
-                    paddingValues = paddingValues
-                )
-            }
-            is CuratedPhotosUIState.ERROR -> {
-                Text(text = "failure ${(curated as CuratedPhotosUIState.ERROR).message}")
+
+                is CuratedPhotosUIState.SUCCESS -> {
+
+                    PhotosCollections(
+                        navController = navController,
+                        curatedPhotos = curated.curatedPhotos,
+                    )
+                }
+
+                is CuratedPhotosUIState.ERROR -> {
+                    Text(text = "failure ${(curated as CuratedPhotosUIState.ERROR).message}")
+                }
             }
         }
     }
@@ -98,7 +111,7 @@ fun HomeSearchBar(
 fun PhotosCollections(
     navController: NavController,
     curatedPhotos: CuratedPhotos,
-    paddingValues: PaddingValues
+    //paddingValues: PaddingValues
 ) {
     val state = rememberLazyStaggeredGridState()
     LazyVerticalStaggeredGrid(
@@ -106,7 +119,7 @@ fun PhotosCollections(
         state = state,
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
+            .padding(5.dp),
         verticalItemSpacing = 10.dp,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
 
@@ -168,6 +181,41 @@ fun BottomBar(
 }
 
 @Composable
-fun FeaturedCollectionList() {
+fun FeaturedCollections(
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
+) {
+    val state = homeScreenViewModel.uiState.collectAsState()
+    when (val featured = state.value.loadingFeaturedCollections) {
+        FeaturedCollectionsUIState.LOADING -> {
+        }
 
+        is FeaturedCollectionsUIState.SUCCESS -> {
+            FeaturedCollectionList(featuredCollection = featured.featuredCollections)
+        }
+
+        is FeaturedCollectionsUIState.ERROR -> {
+        }
+    }
+}
+
+@Composable
+fun FeaturedCollectionList(
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
+    featuredCollection: FeaturedCollections,
+    //innerPaddingValues: PaddingValues
+) {
+    LazyRow(
+        modifier = Modifier.padding(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(featuredCollection.collections) {
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .height(20.dp)
+            ) {
+                Text(text = it.title)
+            }
+        }
+    }
 }
