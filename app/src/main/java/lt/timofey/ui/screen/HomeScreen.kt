@@ -3,25 +3,26 @@ package lt.timofey.ui.screen
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -33,22 +34,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
-import lt.timofey.R
 import lt.timofey.domain.entity.CuratedPhotos
 import lt.timofey.domain.entity.FeaturedCollections
 import lt.timofey.domain.entity.Photos
 import lt.timofey.ui.navigation.Screens
 import lt.timofey.ui.state.CuratedPhotosUIState
 import lt.timofey.ui.state.FeaturedCollectionsUIState
-import lt.timofey.ui.state.HomeScreenUIState
 import lt.timofey.ui.viewmodel.HomeScreenViewModel
 
 
@@ -70,13 +74,13 @@ fun HomeScreen(
             FeaturedCollections()
             when (val curated = state.value.loadingCuratedPhotos) {
                 CuratedPhotosUIState.LOADING -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
+                        //CircularProgressIndicator()
+                        LinearProgressIndicator()
                     }
                 }
 
                 is CuratedPhotosUIState.SUCCESS -> {
-
                     PhotosCollections(
                         navController = navController,
                         curatedPhotos = curated.curatedPhotos,
@@ -201,7 +205,7 @@ fun FeaturedCollections(
 @Composable
 fun FeaturedCollectionList(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
-    featuredCollection: FeaturedCollections,
+    featuredCollection: FeaturedCollections
     //innerPaddingValues: PaddingValues
 ) {
     LazyRow(
@@ -209,12 +213,23 @@ fun FeaturedCollectionList(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(featuredCollection.collections) {
-            Box(
+            Card(
                 modifier = Modifier
-                    .padding(10.dp)
-                    .height(20.dp)
+                    //.height(35.dp)
+                    .padding(5.dp)
+                    .clip(shape = AbsoluteRoundedCornerShape(20.dp))
+                    .clickable { }
+                    .background(color = Color.LightGray)
             ) {
-                Text(text = it.title)
+                Text(
+                    text = it.title,
+                    modifier = Modifier
+                        .padding(7.dp),
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
             }
         }
     }
