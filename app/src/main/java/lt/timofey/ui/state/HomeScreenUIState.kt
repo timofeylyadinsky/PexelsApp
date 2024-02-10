@@ -4,7 +4,7 @@ import lt.timofey.domain.entity.CuratedPhotos
 import lt.timofey.domain.entity.FeaturedCollections
 import lt.timofey.domain.entity.SearchPhotos
 
-data class HomeScreenUIState (
+data class HomeScreenUIState(
     var loadingFeaturedCollections: FeaturedCollectionsUIState = FeaturedCollectionsUIState.LOADING,
     var loadingCuratedPhotos: CuratedPhotosUIState = CuratedPhotosUIState.LOADING,
     var loadingSearchedPhotos: SearchPhotosUIState = SearchPhotosUIState.WAIT,
