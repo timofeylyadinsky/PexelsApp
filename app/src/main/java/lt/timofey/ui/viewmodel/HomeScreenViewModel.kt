@@ -33,14 +33,14 @@ class HomeScreenViewModel @Inject constructor(
     val stat: StateFlow<HomeScreenUIState> = uiState.asStateFlow()
 
     init {
-        fetchFeaturedCollections()
+        //fetchFeaturedCollections()
         fetchCuratedCollection()
     }
 
     fun onSearchTextChange(text: String) {
         uiState.update { it.copy(searchQuery = text, isSearched = text.isNotBlank())}
         if (text.isNotBlank()) {
-                searchPhotosCollections(text)
+            searchPhotosCollections(text)
         }
         else {
             fetchCuratedCollection()
@@ -113,8 +113,9 @@ class HomeScreenViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            uiState.value.loadingCuratedPhotos =
-                CuratedPhotosUIState.ERROR(message = e.localizedMessage)
+            uiState.update {
+                it.copy(loadingCuratedPhotos = CuratedPhotosUIState.ERROR(e.localizedMessage))
+            }
             Log.d("!!!!!!!", e.localizedMessage)
         }
     }

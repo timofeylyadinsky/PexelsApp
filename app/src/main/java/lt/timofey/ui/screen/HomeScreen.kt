@@ -58,15 +58,12 @@ fun HomeScreen(
             BottomBar(navController = navController)
         }
     ) { paddingValues ->
-
-        //
         when (val curated = state.value.loadingCuratedPhotos) {
             CuratedPhotosUIState.LOADING -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
-
             is CuratedPhotosUIState.SUCCESS -> {
                 PhotosCollections(
                     navController = navController,
@@ -74,9 +71,8 @@ fun HomeScreen(
                     paddingValues = paddingValues
                 )
             }
-
             is CuratedPhotosUIState.ERROR -> {
-                Text(text = "failure ${(state as CuratedPhotosUIState.ERROR).message}")
+                Text(text = "failure ${(curated as CuratedPhotosUIState.ERROR).message}")
             }
         }
     }
@@ -159,7 +155,8 @@ fun BottomBar(
                 icon = {
                     Image(
                         painter = (if (currentDestination?.route == screen.route) painterResource(
-                            id = screen.selectedIcon)
+                            id = screen.selectedIcon
+                        )
                         else painterResource(
                             id = screen.unselectedIcon
                         )),
@@ -167,6 +164,10 @@ fun BottomBar(
                     )
                 })
         }
-
     }
+}
+
+@Composable
+fun FeaturedCollectionList() {
+
 }
