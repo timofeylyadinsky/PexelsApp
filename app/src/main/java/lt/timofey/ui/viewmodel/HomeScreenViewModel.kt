@@ -104,6 +104,17 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    fun updateNetwork() = viewModelScope.launch {
+        uiState.update { currentState ->
+            currentState.copy(
+                loadingCuratedPhotos =
+                CuratedPhotosUIState.LOADING
+            )
+        }
+        fetchFeaturedCollections()
+        fetchCuratedCollection()
+    }
+
     private fun fetchCuratedCollection() = viewModelScope.launch {
         try {
             val fetchCollections = getCuratedPhotosUseCase()

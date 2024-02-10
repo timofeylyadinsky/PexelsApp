@@ -74,9 +74,11 @@ fun HomeScreen(
             FeaturedCollections()
             when (val curated = state.value.loadingCuratedPhotos) {
                 CuratedPhotosUIState.LOADING -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                         //CircularProgressIndicator()
-                        LinearProgressIndicator()
+                        LinearProgressIndicator(
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 }
 
@@ -88,7 +90,8 @@ fun HomeScreen(
                 }
 
                 is CuratedPhotosUIState.ERROR -> {
-                    Text(text = "failure ${(curated as CuratedPhotosUIState.ERROR).message}")
+                    //Text(text = "failure ${(curated as CuratedPhotosUIState.ERROR).message}")
+                    NetworkConnectionStub()
                 }
             }
         }
