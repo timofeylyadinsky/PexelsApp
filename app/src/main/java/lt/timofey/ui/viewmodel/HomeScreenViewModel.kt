@@ -1,6 +1,5 @@
 package lt.timofey.ui.viewmodel
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +8,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,16 +31,15 @@ class HomeScreenViewModel @Inject constructor(
     val stat: StateFlow<HomeScreenUIState> = uiState.asStateFlow()
 
     init {
-        //fetchFeaturedCollections()
+        fetchFeaturedCollections()
         fetchCuratedCollection()
     }
 
     fun onSearchTextChange(text: String) {
-        uiState.update { it.copy(searchQuery = text, isSearched = text.isNotBlank())}
+        uiState.update { it.copy(searchQuery = text, isSearched = text.isNotBlank()) }
         if (text.isNotBlank()) {
             searchPhotosCollections(text)
-        }
-        else {
+        } else {
             fetchCuratedCollection()
         }
     }
@@ -53,17 +50,22 @@ class HomeScreenViewModel @Inject constructor(
             val searchResult = searchPhotosUseCase(query)
             searchResult.debounce(500L).collect() { data ->
                 if (data.errorMessage.isNullOrEmpty()) {
-                    uiState.update { it.copy(loadingCuratedPhotos = CuratedPhotosUIState.SUCCESS(data.curatedPhotos[0].toCuratedPhotos())) }
+                    uiState.update {
+                        it.copy(
+                            loadingCuratedPhotos = CuratedPhotosUIState.SUCCESS(
+                                data.curatedPhotos[0].toCuratedPhotos()
+                            )
+                        )
+                    }
                     Log.d("!!!!!!!", data.curatedPhotos.toString())
-                }
-                else {
+                } else {
                     uiState.update {
                         it.copy(loadingCuratedPhotos = CuratedPhotosUIState.ERROR(data.errorMessage))
                     }
                     Log.d("!!!!!!!", data.errorMessage)
                 }
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Log.d("!!!!!Search", e.localizedMessage)
         }
     }
@@ -80,14 +82,22 @@ class HomeScreenViewModel @Inject constructor(
                         )
                     }
                 } else {
-                    uiState.value.loadingFeaturedCollections =
-                        FeaturedCollectionsUIState.ERROR(message = data.errorMessage)
+                    uiState.update { currentState ->
+                        currentState.copy(
+                            loadingFeaturedCollections =
+                            FeaturedCollectionsUIState.ERROR(message = data.errorMessage)
+                        )
+                    }
                     Log.d("!!!!!!!", data.errorMessage.toString())
                 }
             }
         } catch (e: Exception) {
-            uiState.value.loadingFeaturedCollections =
-                FeaturedCollectionsUIState.ERROR(message = e.localizedMessage)
+            uiState.update { currentState ->
+                currentState.copy(
+                    loadingFeaturedCollections =
+                    FeaturedCollectionsUIState.ERROR(message = e.localizedMessage)
+                )
+            }
             Log.d("!!!!!!!", e.localizedMessage)
         }
     }
