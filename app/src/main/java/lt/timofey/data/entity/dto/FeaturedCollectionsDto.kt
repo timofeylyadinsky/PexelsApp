@@ -5,6 +5,6 @@ data class FeaturedCollectionsDto(
 )
 
 data class CollectionsDto(
-    val id: Int,
+    val id: String,
     val title: String
 )

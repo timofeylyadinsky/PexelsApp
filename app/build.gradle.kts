@@ -65,8 +65,14 @@ dependencies {
     implementation(Deps.material3)
 
     implementation(Deps.hilt)
+    implementation(Deps.navigationCompose)
     annotationProcessor(Deps.hiltCompiler)
     kapt(Deps.hiltCompilerKapt)
+    implementation(Deps.hiltNavigation)
+
+    implementation(Deps.glideCompose)
+    implementation(Deps.landscapist)
+    implementation(Deps.coil)
 
     implementation(Deps.retrofit)
     implementation(Deps.retrofitGson)
