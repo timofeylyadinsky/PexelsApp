@@ -20,9 +20,12 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -121,8 +124,20 @@ fun HomeSearchBar(
             unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
             disabledContainerColor = MaterialTheme.colorScheme.secondary,
             unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent
-        )
+            focusedIndicatorColor = Color.Transparent,
+            cursorColor = MaterialTheme.colorScheme.onPrimary,
+            focusedTextColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        trailingIcon = {
+            if (state.value.isSearched)
+            Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = "clear",
+                modifier = Modifier.clickable {
+                    homeScreenViewModel.onSearchTextChange("")
+                }
+                )
+        }
     )
 }
 
