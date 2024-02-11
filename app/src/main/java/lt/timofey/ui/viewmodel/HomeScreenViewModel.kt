@@ -37,7 +37,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun onSearchTextChange(text: String) {
+    fun onSearchTextChange(text: String) = viewModelScope.launch {
         uiState.update { it.copy(searchQuery = text, isSearched = text.isNotBlank()) }
         if (text.isNotBlank()) {
             searchPhotosCollections(text)
@@ -72,7 +72,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun fetchFeaturedCollections() = viewModelScope.launch {
+    private suspend fun fetchFeaturedCollections() = viewModelScope.launch {
         try {
             val fetchCollections = getFeaturedCollectionsUseCase()
             fetchCollections.collect { data ->
@@ -115,7 +115,7 @@ class HomeScreenViewModel @Inject constructor(
         fetchCuratedCollection()
     }
 
-    private fun fetchCuratedCollection() = viewModelScope.launch {
+    private suspend fun fetchCuratedCollection() = viewModelScope.launch {
         try {
             val fetchCollections = getCuratedPhotosUseCase()
             fetchCollections.collect { data ->
