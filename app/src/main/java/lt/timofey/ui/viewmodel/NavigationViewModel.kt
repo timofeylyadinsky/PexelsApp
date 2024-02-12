@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import lt.timofey.domain.entity.Photos
 
-@HiltViewModel
+//@HiltViewModel
 class NavigationViewModel : ViewModel() {
     val uiState = MutableStateFlow<Photos?>(null)
     fun setPhoto(currentPhoto: Photos) {
