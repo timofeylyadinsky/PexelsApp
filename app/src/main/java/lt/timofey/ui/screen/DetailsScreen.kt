@@ -52,7 +52,7 @@ fun DetailsScreen(
     val state = navigationViewModel.uiState.collectAsState()
     Scaffold(
         modifier = Modifier.padding(20.dp),
-        topBar = { TopDetails(state.value?.photographer!!) },
+        topBar = { TopDetails(state.value?.photographer!!, navController) },
 
     ) { paddingValue ->
         Column(
@@ -76,37 +76,40 @@ fun DetailsScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DetailsScreenDemo() {
-    Scaffold(
-        modifier = Modifier.padding(20.dp),
-        topBar = { TopDetails("text") }
-    ) { paddingValue ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValue)
-                .fillMaxSize()
-        ) {
-            Icon(
-                imageVector = Icons.Filled.AccountBox,
-                contentDescription = "",
-                modifier = Modifier.padding(vertical = 10.dp)
-                //.fillMaxSize()
-            )
-            BottomDetailsBar(paddingValue = paddingValue)
-        }
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DetailsScreenDemo() {
+//    Scaffold(
+//        modifier = Modifier.padding(20.dp),
+//        topBar = { TopDetails("text") }
+//    ) { paddingValue ->
+//        Column(
+//            modifier = Modifier
+//                .padding(paddingValue)
+//                .fillMaxSize()
+//        ) {
+//            Icon(
+//                imageVector = Icons.Filled.AccountBox,
+//                contentDescription = "",
+//                modifier = Modifier.padding(vertical = 10.dp)
+//                //.fillMaxSize()
+//            )
+//            BottomDetailsBar(paddingValue = paddingValue)
+//        }
+//    }
+//}
 
 @Composable
 fun TopDetails(
-    text: String
+    text: String,
+    navController: NavController
 ) {
     Row {
         Box(
             modifier = Modifier
-                .clickable { }
+                .clickable {
+                    navController.popBackStack()
+                }
                 .background(
                     color = MaterialTheme.colorScheme.secondary,
                     shape = RoundedCornerShape(10.dp)
