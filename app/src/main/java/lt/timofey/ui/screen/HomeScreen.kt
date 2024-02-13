@@ -59,12 +59,14 @@ import lt.timofey.ui.navigation.Screens
 import lt.timofey.ui.state.CuratedPhotosUIState
 import lt.timofey.ui.state.FeaturedCollectionsUIState
 import lt.timofey.ui.viewmodel.HomeScreenViewModel
+import lt.timofey.ui.viewmodel.NavigationViewModel
 
 
 @Composable
 fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    navigationViewModel: NavigationViewModel
 ) {
     val state = homeScreenViewModel.uiState.collectAsState()
     Scaffold(
@@ -92,6 +94,7 @@ fun HomeScreen(
                     PhotosCollections(
                         navController = navController,
                         curatedPhotos = curated.curatedPhotos,
+                        navigationViewModel = navigationViewModel
                     )
                 }
 
@@ -130,12 +133,12 @@ fun HomeSearchBar(
         ),
         trailingIcon = {
             if (state.value.isSearched)
-            Icon(
-                imageVector = Icons.Default.Clear,
-                contentDescription = "clear",
-                modifier = Modifier.clickable {
-                    homeScreenViewModel.onSearchTextChange("")
-                }
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = "clear",
+                    modifier = Modifier.clickable {
+                        homeScreenViewModel.onSearchTextChange("")
+                    }
                 )
         }
     )
@@ -146,6 +149,7 @@ fun PhotosCollections(
     navController: NavController,
     curatedPhotos: CuratedPhotos,
     //paddingValues: PaddingValues
+    navigationViewModel: NavigationViewModel
 ) {
     val state = rememberLazyStaggeredGridState()
     LazyVerticalStaggeredGrid(
@@ -159,7 +163,11 @@ fun PhotosCollections(
 
         ) {
         items(curatedPhotos.photos) {
-            PhotoItem(navController = navController, curatedPhoto = it)
+            PhotoItem(
+                navController = navController,
+                curatedPhoto = it,
+                navigationViewModel = navigationViewModel
+            )
         }
     }
 
@@ -169,7 +177,8 @@ fun PhotosCollections(
 fun PhotoItem(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
     navController: NavController,
-    curatedPhoto: Photos
+    curatedPhoto: Photos,
+    navigationViewModel: NavigationViewModel
 ) {
     AsyncImage(
         model = curatedPhoto.src.medium,
@@ -178,7 +187,11 @@ fun PhotoItem(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(10.dp))
             .fillMaxWidth()
-            .clickable { Log.d("!!!!", curatedPhoto.toString()) }
+            .clickable {
+                Log.d("!!!!", curatedPhoto.toString())
+                navigationViewModel.setPhoto(curatedPhoto)
+                navController.navigate(Screens.DetailsScreen.route)
+            }
     )
 }
 
