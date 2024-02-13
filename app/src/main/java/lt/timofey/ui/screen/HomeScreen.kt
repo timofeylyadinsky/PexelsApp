@@ -133,12 +133,12 @@ fun HomeSearchBar(
         ),
         trailingIcon = {
             if (state.value.isSearched)
-            Icon(
-                imageVector = Icons.Default.Clear,
-                contentDescription = "clear",
-                modifier = Modifier.clickable {
-                    homeScreenViewModel.onSearchTextChange("")
-                }
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = "clear",
+                    modifier = Modifier.clickable {
+                        homeScreenViewModel.onSearchTextChange("")
+                    }
                 )
         }
     )
@@ -163,7 +163,11 @@ fun PhotosCollections(
 
         ) {
         items(curatedPhotos.photos) {
-            PhotoItem(navController = navController, curatedPhoto = it, navigationViewModel = navigationViewModel)
+            PhotoItem(
+                navController = navController,
+                curatedPhoto = it,
+                navigationViewModel = navigationViewModel
+            )
         }
     }
 
