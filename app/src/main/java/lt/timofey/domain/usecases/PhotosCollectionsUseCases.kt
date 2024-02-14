@@ -9,9 +9,11 @@ import lt.timofey.data.repository.impl.PhotosRepositoryImpl
 import lt.timofey.data.repository.module.IoDispatcher
 import lt.timofey.domain.entity.CuratedPhotosData
 import lt.timofey.domain.entity.FeaturedCollectionsData
+import lt.timofey.domain.entity.PhotosData
 import lt.timofey.domain.entity.SearchPhotosData
 import lt.timofey.domain.entity.toCuratedPhotos
 import lt.timofey.domain.entity.toFeaturedCollections
+import lt.timofey.domain.entity.toPhotos
 import lt.timofey.domain.entity.toSearchPhotos
 import javax.inject.Inject
 
@@ -56,4 +58,18 @@ class getSearchPhotosUseCase @Inject constructor(
                 }
             }
         }
+}
+
+class fetchPhotoById @Inject constructor(
+    private val photosRepositoryImpl: PhotosRepositoryImpl,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
+    suspend operator fun invoke(id: Int) = withContext(ioDispatcher) {
+        flow {
+            when (val response = photosRepositoryImpl.fetchPhotos(id)) {
+                is NetworkResult.Success -> emit(PhotosData(photos = response.data.toPhotos()))
+                is NetworkResult.Error -> emit(PhotosData(errorMessage = "${response.code} : ${response.message}"))
+            }
+        }
+    }
 }
