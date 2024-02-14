@@ -70,7 +70,18 @@ class DetailsScreenViewModel @Inject constructor(
         }
     }
 
-    fun savePhoto() {
+    fun clickBookmarkButton() {
+        viewModelScope.launch {
+            if (uiState.value.isSaved) {
+                deletePhoto()
+            } else {
+                savePhoto()
+            }
+            isSaved()
+        }
+    }
+
+    private suspend fun savePhoto() {
         viewModelScope.launch {
             if (uiState.value.photo != null) {
                 savePhotoToBookmarkUseCase(uiState.value.photo!!)
@@ -78,7 +89,7 @@ class DetailsScreenViewModel @Inject constructor(
         }
     }
 
-    fun deletePhoto() {
+    private suspend fun deletePhoto() {
         viewModelScope.launch {
             if (uiState.value.photo != null) {
                 deletePhotosFromBookmarkUseCase(uiState.value.photo!!)

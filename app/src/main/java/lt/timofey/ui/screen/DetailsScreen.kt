@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -154,7 +155,11 @@ fun TopDetails(
 }
 
 @Composable
-fun BottomDetailsBar(paddingValue: PaddingValues) {
+fun BottomDetailsBar(
+    paddingValue: PaddingValues,
+    detailsScreenViewModel: DetailsScreenViewModel = hiltViewModel()
+) {
+    val state = detailsScreenViewModel.uiState.collectAsState()
     Row(
         modifier = Modifier
             //.padding(paddingValue)
@@ -194,7 +199,12 @@ fun BottomDetailsBar(paddingValue: PaddingValues) {
         }
         Image(
             contentDescription = "",
-            painter = painterResource(id = R.drawable.bookmark_button_inactive),
+            painter = painterResource(id = if (state.value.isSaved) R.drawable.bookmark_button_active
+            else R.drawable.bookmark_button_inactive,
+                ),
+            modifier = Modifier.clickable {
+                detailsScreenViewModel.clickBookmarkButton()
+            }
         )
     }
 }
