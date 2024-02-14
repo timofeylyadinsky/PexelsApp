@@ -17,13 +17,12 @@ data class PhotosDbo(
     val photographer: String,
     val photographer_url: String,
     val photographer_id: Int,
-    val srcId: Int,
+    @Embedded val src: SrcDbo,
     val alt: String
 )
 
 @Entity(tableName = "src_photos")
 data class SrcDbo(
-    @PrimaryKey val photoId: Int,
     val original: String,
     val large2x: String,
     val large: String,
@@ -34,25 +33,25 @@ data class SrcDbo(
     val tiny: String
 )
 
-data class PhotoSrcDbo(
-    @Embedded val photo: PhotosDbo,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "srcId"
-    )
-    val src: SrcDbo
-)
+//data class PhotoSrcDbo(
+//    @Embedded val photo: PhotosDbo,
+//    @Relation(
+//        parentColumn = "id",
+//        entityColumn = "srcId"
+//    )
+//    val src: SrcDbo
+//)
 
-fun PhotoSrcDbo.toPhotosDto() = PhotosDto(
-    id = photo.id,
-    width = photo.width,
-    height = photo.height,
-    url = photo.url,
-    photographer = photo.photographer,
-    photographer_id = photo.photographer_id,
-    photographer_url = photo.photographer_url,
+fun PhotosDbo.toPhotosDto() = PhotosDto(
+    id = id,
+    width = width,
+    height = height,
+    url = url,
+    photographer = photographer,
+    photographer_id = photographer_id,
+    photographer_url = photographer_url,
     src = src.toSrcDto(),
-    alt = photo.alt
+    alt = alt
 )
 
 fun SrcDbo.toSrcDto() = SrcDto(
