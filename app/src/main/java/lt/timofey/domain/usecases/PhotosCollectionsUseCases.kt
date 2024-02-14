@@ -60,7 +60,7 @@ class getSearchPhotosUseCase @Inject constructor(
         }
 }
 
-class fetchPhotoById @Inject constructor(
+class fetchPhotoByIdUseCase @Inject constructor(
     private val photosRepositoryImpl: PhotosRepositoryImpl,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
