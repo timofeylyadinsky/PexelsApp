@@ -10,4 +10,5 @@ object Versions {
     const val glide = "1.0.0-beta01"
     const val landscapist = "2.2.3"
     const val coil = "2.5.0"
+    const val room = "2.6.1"
 }

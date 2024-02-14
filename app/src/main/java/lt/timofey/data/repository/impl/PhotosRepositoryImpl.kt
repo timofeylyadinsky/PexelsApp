@@ -4,6 +4,7 @@ import lt.timofey.data.api.ApiService
 import lt.timofey.data.api.NetworkResult
 import lt.timofey.data.entity.dto.CuratedPhotosDto
 import lt.timofey.data.entity.dto.FeaturedCollectionsDto
+import lt.timofey.data.entity.dto.PhotosDto
 import lt.timofey.data.entity.dto.SearchPhotosDto
 import lt.timofey.data.repository.PhotosRepository
 import lt.timofey.data.util.handleApi
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 class PhotosRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-) : PhotosRepository  {
+) : PhotosRepository {
     override suspend fun getFeaturedCollections(): NetworkResult<FeaturedCollectionsDto> =
         handleApi { apiService.getFeaturedCollections() }
 
@@ -20,4 +21,7 @@ class PhotosRepositoryImpl @Inject constructor(
 
     override suspend fun searchForPhotos(searchText: String): NetworkResult<SearchPhotosDto> =
         handleApi { apiService.searchForPhotos(searchText) }
+
+    override suspend fun fetchPhotos(id: Int): NetworkResult<PhotosDto> =
+        handleApi { apiService.fetchPhotoById(id) }
 }

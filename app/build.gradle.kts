@@ -77,6 +77,11 @@ dependencies {
     implementation(Deps.retrofit)
     implementation(Deps.retrofitGson)
 
+    implementation(Deps.room)
+    annotationProcessor(Deps.roomCompiler)
+    kapt(Deps.roomCompiler)
+    implementation(Deps.roomKtx)
+
 
 
 
