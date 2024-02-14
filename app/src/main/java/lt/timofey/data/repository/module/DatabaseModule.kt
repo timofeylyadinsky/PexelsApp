@@ -20,6 +20,6 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providesBookmarkDB(@ApplicationContext context: Context) = Room
-        .databaseBuilder(context, BookmarkDB::class.java, "bookmark_db")
+        .databaseBuilder(context, BookmarkDB::class.java, "bookmark_photos")
         .build()
 }

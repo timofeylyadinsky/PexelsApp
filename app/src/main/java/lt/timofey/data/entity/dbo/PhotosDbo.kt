@@ -21,7 +21,7 @@ data class PhotosDbo(
     val alt: String
 )
 
-@Entity(tableName = "src_photos")
+//@Entity(tableName = "src_photos")
 data class SrcDbo(
     val original: String,
     val large2x: String,
