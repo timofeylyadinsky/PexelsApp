@@ -190,7 +190,7 @@ fun PhotoItem(
             .clickable {
                 Log.d("!!!!", curatedPhoto.toString())
                 navigationViewModel.setPhoto(curatedPhoto)
-                navController.navigate(Screens.DetailsScreen.route)
+                navController.navigate(Screens.DetailsScreen.route + "/${curatedPhoto.id}")
             }
     )
 }

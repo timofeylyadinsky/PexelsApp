@@ -22,8 +22,8 @@ class isPhotoSavedUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val bookmarkRepositoryImpl: BookmarkRepositoryImpl
 ) {
-    suspend operator fun invoke(photos: Photos) = withContext(ioDispatcher) {
-        bookmarkRepositoryImpl.getSavedPhotoById(photos.id) != null
+    suspend operator fun invoke(id: Int) = withContext(ioDispatcher) {
+        bookmarkRepositoryImpl.getSavedPhotoById(id) != null
     }
 }
 
@@ -40,8 +40,8 @@ class getPhotoFromDBUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val bookmarkRepositoryImpl: BookmarkRepositoryImpl
 ) {
-    suspend operator fun invoke(photos: Photos) = withContext(ioDispatcher) {
-        bookmarkRepositoryImpl.getSavedPhotoById(photos.id)
+    suspend operator fun invoke(id: Int) = withContext(ioDispatcher) {
+        bookmarkRepositoryImpl.getSavedPhotoById(id)
     }
 }
 

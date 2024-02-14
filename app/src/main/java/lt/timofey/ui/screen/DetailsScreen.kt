@@ -38,16 +38,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import lt.timofey.R
 import lt.timofey.ui.navigation.Screens
+import lt.timofey.ui.viewmodel.DetailsScreenViewModel
 import lt.timofey.ui.viewmodel.NavigationViewModel
 
 @Composable
 fun DetailsScreen(
     navController: NavController,
-    navigationViewModel: NavigationViewModel
+    navigationViewModel: NavigationViewModel,
+    detailsScreenViewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
     val state = navigationViewModel.uiState.collectAsState()
     Scaffold(
