@@ -24,3 +24,12 @@ class isPhotoSavedUseCase @Inject constructor(
         bookmarkRepositoryImpl.getSavedPhotoById(photos.id) != null
     }
 }
+
+class deletePhotosFromBookmarkUseCase @Inject constructor(
+    private val ioDispatcher: CoroutineDispatcher,
+    private val bookmarkRepositoryImpl: BookmarkRepositoryImpl
+) {
+    suspend operator fun invoke(photos: Photos) = withContext(ioDispatcher){
+        bookmarkRepositoryImpl.deletePhoto(photos.toPhotosDbo())
+    }
+}
