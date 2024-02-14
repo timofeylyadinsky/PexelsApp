@@ -2,9 +2,11 @@ package lt.timofey.data.api
 
 import lt.timofey.data.entity.dto.CuratedPhotosDto
 import lt.timofey.data.entity.dto.FeaturedCollectionsDto
+import lt.timofey.data.entity.dto.PhotosDto
 import lt.timofey.data.entity.dto.SearchPhotosDto
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -19,4 +21,7 @@ interface ApiService {
 
     @GET("search")
     suspend fun searchForPhotos(@Query("query") query: String = ""): Response<SearchPhotosDto>
+
+    @GET("photos/{id}")
+    suspend fun fetchPhotoById(@Path("id") id: Int) : Response<PhotosDto>
 }
