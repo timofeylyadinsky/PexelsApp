@@ -9,5 +9,5 @@ interface BookmarkRepository {
     suspend fun savePhoto(photos: PhotosDbo)
     suspend fun getSavedPhotos() : List<PhotosDto>
     suspend fun deletePhoto(photos: PhotosDbo)
-    suspend fun getSavedPhotoById(id: Int)
+    suspend fun getSavedPhotoById(id: Int) : PhotosDto?
 }

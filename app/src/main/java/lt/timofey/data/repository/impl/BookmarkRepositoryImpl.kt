@@ -17,11 +17,9 @@ class BookmarkRepositoryImpl @Inject constructor(
     override suspend fun getSavedPhotos() = bookmarkDao.selectBookmarkPhotos().map { it.toPhotosDto() }
 
     override suspend fun deletePhoto(photos: PhotosDbo) {
-        TODO("Not yet implemented")
+        bookmarkDao.deletePhoto(photos.id)
     }
 
-    override suspend fun getSavedPhotoById(id: Int) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getSavedPhotoById(id: Int) = bookmarkDao.selectPhotoById(id)?.toPhotosDto()
 
 }

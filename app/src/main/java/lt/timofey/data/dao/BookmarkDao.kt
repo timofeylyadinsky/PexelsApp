@@ -18,5 +18,5 @@ interface BookmarkDao {
     suspend fun deletePhoto(pId: Int)
 
     @Query("select * from bookmark_photos where id = :pId")
-    suspend fun selectPhotoById(pId: Int) : Flow<PhotosDbo>
+    suspend fun selectPhotoById(pId: Int) : PhotosDbo?
 }
