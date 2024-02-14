@@ -1,5 +1,7 @@
 package lt.timofey.domain.entity
 
+import lt.timofey.data.entity.dbo.PhotosDbo
+import lt.timofey.data.entity.dbo.SrcDbo
 import lt.timofey.data.entity.dto.CuratedPhotosDto
 import lt.timofey.data.entity.dto.PhotosDto
 import lt.timofey.data.entity.dto.SrcDto
@@ -56,4 +58,27 @@ fun SrcDto.toSrc() = Src(
     portrait = portrait,
     landscape = landscape,
     tiny = tiny
+)
+
+fun Src.toSrcDbo() = SrcDbo(
+    original = original,
+    large2x = large2x,
+    large = large,
+    medium = medium,
+    small = small,
+    portrait = portrait,
+    landscape = landscape,
+    tiny = tiny
+)
+
+fun Photos.toPhotosDbo() = PhotosDbo (
+    id = id,
+    width = width,
+    height = height,
+    url = url,
+    photographer = photographer,
+    photographer_url = photographer_url,
+    photographer_id = photographer_id,
+    src = src.toSrcDbo(),
+    alt = alt
 )
