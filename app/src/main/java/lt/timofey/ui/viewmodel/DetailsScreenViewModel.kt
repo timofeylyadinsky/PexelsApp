@@ -6,15 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import lt.timofey.domain.entity.toCuratedPhotos
 import lt.timofey.domain.usecases.deletePhotosFromBookmarkUseCase
 import lt.timofey.domain.usecases.fetchPhotoByIdUseCase
 import lt.timofey.domain.usecases.isPhotoSavedUseCase
 import lt.timofey.domain.usecases.savePhotoToBookmarkUseCase
-import lt.timofey.ui.state.CuratedPhotosUIState
 import lt.timofey.ui.state.DetailsScreenUIState
 import lt.timofey.ui.state.LoadingPhotoUIState
 import javax.inject.Inject
@@ -39,7 +36,7 @@ class DetailsScreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun isSaved() = viewModelScope.launch {
+    private fun isSaved() = viewModelScope.launch {
         uiState.update { uiState.value.copy(isSaved = isSavedUseCase(id.toInt())) }
     }
 
@@ -71,17 +68,23 @@ class DetailsScreenViewModel @Inject constructor(
     }
 
     fun clickBookmarkButton() {
-        viewModelScope.launch {
-            if (uiState.value.isSaved) {
-                deletePhoto()
-            } else {
-                savePhoto()
-            }
-            isSaved()
+        if (uiState.value.isSaved) {
+            Log.d("!!!!!", "delete")
+            deletePhoto()
+            uiState.update { uiState.value.copy(isSaved = false) }
+        } else {
+            Log.d("!!!!!", "save")
+            savePhoto()
+            uiState.update { uiState.value.copy(isSaved = true) }
         }
+//        viewModelScope.launch {
+//            Log.d("!!!!!", uiState.value.isSaved.toString())
+//            uiState.update { uiState.value.copy(isSaved = isSavedUseCase(id.toInt())) }
+//            Log.d("!!!!!", uiState.value.isSaved.toString())
+//        }
     }
 
-    private suspend fun savePhoto() {
+    private fun savePhoto() {
         viewModelScope.launch {
             if (uiState.value.photo != null) {
                 savePhotoToBookmarkUseCase(uiState.value.photo!!)
@@ -89,7 +92,7 @@ class DetailsScreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun deletePhoto() {
+    private fun deletePhoto() {
         viewModelScope.launch {
             if (uiState.value.photo != null) {
                 deletePhotosFromBookmarkUseCase(uiState.value.photo!!)
