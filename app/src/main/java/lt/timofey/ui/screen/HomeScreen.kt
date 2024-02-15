@@ -189,7 +189,7 @@ fun PhotoItem(
             .fillMaxWidth()
             .clickable {
                 Log.d("!!!!", curatedPhoto.toString())
-                navigationViewModel.setPhoto(curatedPhoto)
+                //navigationViewModel.setPhoto(curatedPhoto)
                 navController.navigate(Screens.DetailsScreen.route + "/${curatedPhoto.id}")
             }
     )
@@ -211,7 +211,7 @@ fun BottomBar(
         items.forEach { screen ->
             NavigationBarItem(
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(screen.route) },
                 icon = {
                     Image(
                         painter = (if (currentDestination?.route == screen.route) painterResource(
