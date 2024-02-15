@@ -41,40 +41,43 @@ fun BookmarkScreen(
     navController: NavController
 ) {
     val state = bookmarkScreenViewModel.uiState.collectAsState()
-    when (val response = state.value.loadingPhoto) {
-        BookmarkUIState.LOADING -> {
-            LoadingBar()
+    Scaffold(
+        bottomBar = {
+            BottomBar(navController = navController)
+        },
+        topBar = {
+            Text(
+                text = "Bookmark",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(7.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
+    ) { paddingValues ->
+        when (val response = state.value.loadingPhoto) {
+            BookmarkUIState.LOADING -> {
+                LoadingBar()
+            }
 
-        is BookmarkUIState.SUCCESS -> {
-            Scaffold(
-                bottomBar = {
-                    BottomBar(navController = navController)
-                },
-                topBar = {
-                    Text(
-                        text = "Bookmark",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(7.dp),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-            ) { paddingValues ->
+            is BookmarkUIState.SUCCESS -> {
+
                 BookmarkGrid(
                     navController = navController,
                     bookmarkPhotos = response.photos,
                     paddingValues = paddingValues
                 )
             }
+
+            is BookmarkUIState.EMPTY -> {
+                EmptyBookmarksScreen(navController, paddingValues = paddingValues)
+            }
+
+            is BookmarkUIState.ERROR -> {}
         }
-
-        is BookmarkUIState.EMPTY -> {}
-        is BookmarkUIState.ERROR -> {}
-
     }
 }
 

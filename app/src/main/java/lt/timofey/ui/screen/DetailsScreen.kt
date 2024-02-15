@@ -118,7 +118,9 @@ fun TopDetails(
         Box(
             modifier = Modifier
                 .clickable {
-                    navController.popBackStack()
+                    val back = navController.previousBackStackEntry?.destination?.route
+                    if (back != null) navController.navigate(back)
+                    else navController.popBackStack()
                 }
                 .background(
                     color = MaterialTheme.colorScheme.secondary,
