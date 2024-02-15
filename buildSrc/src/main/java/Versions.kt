@@ -11,4 +11,5 @@ object Versions {
     const val landscapist = "2.2.3"
     const val coil = "2.5.0"
     const val room = "2.6.1"
+    const val splash = "1.0.0"
 }
