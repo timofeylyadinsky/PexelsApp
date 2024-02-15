@@ -42,7 +42,10 @@ fun BookmarkScreen(
 ) {
     val state = bookmarkScreenViewModel.uiState.collectAsState()
     when (val response = state.value.loadingPhoto) {
-        BookmarkUIState.LOADING -> {}
+        BookmarkUIState.LOADING -> {
+            LoadingBar()
+        }
+
         is BookmarkUIState.SUCCESS -> {
             Scaffold(
                 bottomBar = {
@@ -51,7 +54,9 @@ fun BookmarkScreen(
                 topBar = {
                     Text(
                         text = "Bookmark",
-                        modifier = Modifier.fillMaxWidth().padding(7.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(7.dp),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,

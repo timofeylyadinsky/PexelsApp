@@ -81,13 +81,7 @@ fun HomeScreen(
             FeaturedCollections()
             when (val curated = state.value.loadingCuratedPhotos) {
                 CuratedPhotosUIState.LOADING -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                        //CircularProgressIndicator()
-                        LinearProgressIndicator(
-                            modifier = Modifier.fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
-                    }
+                    LoadingBar()
                 }
 
                 is CuratedPhotosUIState.SUCCESS -> {

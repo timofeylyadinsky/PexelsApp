@@ -19,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,13 +53,7 @@ fun DetailsScreen(
     val state = detailsScreenViewModel.uiState.collectAsState()
     when (val loaded = state.value.loadingPhoto) {
         LoadingPhotoUIState.LOADING -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                //CircularProgressIndicator()
-                LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.tertiary
-                )
-            }
+            LoadingBar()
         }
 
         is LoadingPhotoUIState.SUCCESS -> {
@@ -179,7 +171,7 @@ fun BottomDetailsBar(
                 )
                 .align(alignment = Alignment.CenterVertically)
                 .clickable {
-                           downloader.downloadImage(state.value.photo?.src?.original)
+                    downloader.downloadImage(state.value.photo?.src?.original)
                 },
         ) {
             Icon(
@@ -205,9 +197,10 @@ fun BottomDetailsBar(
         }
         Image(
             contentDescription = "",
-            painter = painterResource(id = if (state.value.isSaved) R.drawable.bookmark_button_active
-            else R.drawable.bookmark_button_inactive,
-                ),
+            painter = painterResource(
+                id = if (state.value.isSaved) R.drawable.bookmark_button_active
+                else R.drawable.bookmark_button_inactive,
+            ),
             modifier = Modifier.clickable {
                 detailsScreenViewModel.clickBookmarkButton()
             }
