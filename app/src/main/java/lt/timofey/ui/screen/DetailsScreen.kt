@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalMapOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +41,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import lt.timofey.R
 import lt.timofey.ui.state.LoadingPhotoUIState
+import lt.timofey.ui.util.downloader.DownloaderImpl
 import lt.timofey.ui.viewmodel.DetailsScreenViewModel
 import lt.timofey.ui.viewmodel.NavigationViewModel
 
@@ -160,6 +162,8 @@ fun BottomDetailsBar(
     detailsScreenViewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
     val state = detailsScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val downloader = DownloaderImpl(context)
     Row(
         modifier = Modifier
             //.padding(paddingValue)
@@ -174,7 +178,9 @@ fun BottomDetailsBar(
                     shape = RoundedCornerShape(20.dp)
                 )
                 .align(alignment = Alignment.CenterVertically)
-                .clickable { },
+                .clickable {
+                           downloader.downloadImage(state.value.photo?.src?.original)
+                },
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.download_vector),
