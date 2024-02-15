@@ -1,10 +1,8 @@
 package lt.timofey.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +17,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,49 +28,69 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalMapOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import lt.timofey.R
-import lt.timofey.ui.navigation.Screens
+import lt.timofey.ui.state.LoadingPhotoUIState
+import lt.timofey.ui.util.downloader.DownloaderImpl
+import lt.timofey.ui.viewmodel.DetailsScreenViewModel
 import lt.timofey.ui.viewmodel.NavigationViewModel
 
 @Composable
 fun DetailsScreen(
     navController: NavController,
-    navigationViewModel: NavigationViewModel
+    navigationViewModel: NavigationViewModel,
+    detailsScreenViewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
-    val state = navigationViewModel.uiState.collectAsState()
-    Scaffold(
-        modifier = Modifier.padding(20.dp),
-        topBar = { TopDetails(state.value?.photographer!!, navController) },
-
-    ) { paddingValue ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValue)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            AsyncImage(
-                model = state.value?.src?.original,
-                contentDescription = state.value?.alt,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .clip(shape = RoundedCornerShape(10.dp))
-                    .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 10.dp)
-                    .clickable {}
-            )
-            BottomDetailsBar(paddingValue = paddingValue)
+    //val state = navigationViewModel.uiState.collectAsState()
+    val state = detailsScreenViewModel.uiState.collectAsState()
+    when (val loaded = state.value.loadingPhoto) {
+        LoadingPhotoUIState.LOADING -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                //CircularProgressIndicator()
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
         }
+
+        is LoadingPhotoUIState.SUCCESS -> {
+            Scaffold(
+                modifier = Modifier.padding(20.dp),
+                topBar = { TopDetails(loaded.photos.photographer, navController) },
+            ) { paddingValue ->
+                Column(
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    AsyncImage(
+                        model = loaded.photos.src.original,
+                        contentDescription = loaded.photos.alt,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .clip(shape = RoundedCornerShape(10.dp))
+                            .fillMaxWidth()
+                            .padding(top = 20.dp, bottom = 10.dp)
+                            .clickable {}
+                    )
+                    BottomDetailsBar(paddingValue = paddingValue)
+                }
+            }
+        }
+
+        is LoadingPhotoUIState.ERROR -> {}
     }
 }
 
@@ -139,7 +157,13 @@ fun TopDetails(
 }
 
 @Composable
-fun BottomDetailsBar(paddingValue: PaddingValues) {
+fun BottomDetailsBar(
+    paddingValue: PaddingValues,
+    detailsScreenViewModel: DetailsScreenViewModel = hiltViewModel()
+) {
+    val state = detailsScreenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val downloader = DownloaderImpl(context)
     Row(
         modifier = Modifier
             //.padding(paddingValue)
@@ -154,7 +178,9 @@ fun BottomDetailsBar(paddingValue: PaddingValues) {
                     shape = RoundedCornerShape(20.dp)
                 )
                 .align(alignment = Alignment.CenterVertically)
-                .clickable { },
+                .clickable {
+                           downloader.downloadImage(state.value.photo?.src?.original)
+                },
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.download_vector),
@@ -179,7 +205,12 @@ fun BottomDetailsBar(paddingValue: PaddingValues) {
         }
         Image(
             contentDescription = "",
-            painter = painterResource(id = R.drawable.bookmark_button_inactive),
+            painter = painterResource(id = if (state.value.isSaved) R.drawable.bookmark_button_active
+            else R.drawable.bookmark_button_inactive,
+                ),
+            modifier = Modifier.clickable {
+                detailsScreenViewModel.clickBookmarkButton()
+            }
         )
     }
 }
