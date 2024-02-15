@@ -58,12 +58,13 @@ fun DetailsScreen(
 
         is LoadingPhotoUIState.SUCCESS -> {
             Scaffold(
-                modifier = Modifier.padding(20.dp),
+                //modifier = Modifier.padding(20.dp),
                 topBar = { TopDetails(loaded.photos.photographer, navController) },
             ) { paddingValue ->
                 Column(
                     modifier = Modifier
                         .padding(paddingValue)
+                        .padding(horizontal = 20.dp, vertical = 7.dp)
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
@@ -114,7 +115,7 @@ fun TopDetails(
     text: String,
     navController: NavController
 ) {
-    Row {
+    Row (modifier = Modifier.padding(20.dp)) {
         Box(
             modifier = Modifier
                 .clickable {
