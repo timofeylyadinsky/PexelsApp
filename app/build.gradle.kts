@@ -81,6 +81,7 @@ dependencies {
     annotationProcessor(Deps.roomCompiler)
     kapt(Deps.roomCompiler)
     implementation(Deps.roomKtx)
+    implementation(Deps.splash)
 
 
 
