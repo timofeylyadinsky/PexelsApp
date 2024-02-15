@@ -245,6 +245,7 @@ fun FeaturedCollectionList(
     featuredCollection: FeaturedCollections
     //innerPaddingValues: PaddingValues
 ) {
+    val state = homeScreenViewModel.uiState.collectAsState()
     LazyRow(
         modifier = Modifier.padding(5.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -255,9 +256,12 @@ fun FeaturedCollectionList(
                     //.height(35.dp)
                     .padding(5.dp)
                     .clip(shape = AbsoluteRoundedCornerShape(20.dp))
-                    .clickable { }
+                    .clickable {
+                        homeScreenViewModel.onSearchTextChange(it.title)
+                    }
                     .background(color = MaterialTheme.colorScheme.secondary),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
+                colors = CardDefaults.cardColors(containerColor =
+                if(it.title != state.value.searchQuery) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary)
             ) {
                 Text(
                     text = it.title,
