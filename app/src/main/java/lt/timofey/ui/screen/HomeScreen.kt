@@ -81,13 +81,7 @@ fun HomeScreen(
             FeaturedCollections()
             when (val curated = state.value.loadingCuratedPhotos) {
                 CuratedPhotosUIState.LOADING -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                        //CircularProgressIndicator()
-                        LinearProgressIndicator(
-                            modifier = Modifier.fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
-                    }
+                    LoadingBar()
                 }
 
                 is CuratedPhotosUIState.SUCCESS -> {
@@ -189,7 +183,7 @@ fun PhotoItem(
             .fillMaxWidth()
             .clickable {
                 Log.d("!!!!", curatedPhoto.toString())
-                navigationViewModel.setPhoto(curatedPhoto)
+                //navigationViewModel.setPhoto(curatedPhoto)
                 navController.navigate(Screens.DetailsScreen.route + "/${curatedPhoto.id}")
             }
     )
@@ -211,7 +205,7 @@ fun BottomBar(
         items.forEach { screen ->
             NavigationBarItem(
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(screen.route) },
                 icon = {
                     Image(
                         painter = (if (currentDestination?.route == screen.route) painterResource(

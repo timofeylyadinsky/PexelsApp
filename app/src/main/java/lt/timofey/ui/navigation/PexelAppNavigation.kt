@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import lt.timofey.ui.screen.BookmarkScreen
 import lt.timofey.ui.screen.DetailsScreen
 import lt.timofey.ui.screen.HomeScreen
 import lt.timofey.ui.viewmodel.NavigationViewModel
@@ -31,6 +32,9 @@ fun PexelAppNavigation(
             })
         ) {
             DetailsScreen(navController = navController, navigationViewModel = navigationViewModel)
+        }
+        composable(route = Screens.BookmarkScreen.route) {
+            BookmarkScreen(navController = navController)
         }
     }
 }
